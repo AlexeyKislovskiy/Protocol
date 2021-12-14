@@ -35,6 +35,27 @@ public abstract class Message {
         }
     }
 
+    protected static void putTwoDimensionalArray(byte[] data, int current, int[][] value) {
+        putInt(data, current, value.length);
+        putAnyArraysWithLength(data, current + 4, value);
+    }
+
+    protected static void putAnyTwoDimensionalArrays(byte[] data, int current, int[][]... value) {
+        int totalLength = 0;
+        for (int[][] array : value) {
+            putTwoDimensionalArray(data, current + totalLength, array);
+            totalLength += twoDimensionalArrayLength(array);
+        }
+    }
+
+    protected static int twoDimensionalArrayLength(int[][] array) {
+        int totalLength = 4;
+        for (int[] innerArray : array) {
+            totalLength += (1 + innerArray.length) * 4;
+        }
+        return totalLength;
+    }
+
     protected static int[] readArray(DataInputStream dis) throws MessageReadingException {
         try {
             int length = dis.readInt() / 4;
@@ -42,6 +63,20 @@ public abstract class Message {
             int[] data = new int[length];
             for (int i = 0; i < length; i++) {
                 data[i] = dis.readInt();
+            }
+            return data;
+        } catch (IOException e) {
+            throw new MessageReadingException("Can't read message", e);
+        }
+    }
+
+    protected static int[][] readTwoDimensionalArray(DataInputStream dis) throws MessageReadingException {
+        try {
+            int length = dis.readInt();
+            if (length < 0) throw new MessageReadingException("Negative array length");
+            int[][] data = new int[length][];
+            for (int i = 0; i < length; i++) {
+                data[i] = readArray(dis);
             }
             return data;
         } catch (IOException e) {

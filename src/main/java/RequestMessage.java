@@ -2,6 +2,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class RequestMessage extends Message {
     public static final int START_REQUEST = 1;
@@ -221,5 +222,25 @@ public class RequestMessage extends Message {
                 ", yOpponent=" + Arrays.toString(yOpponent) +
                 ", charactersOpponent=" + Arrays.toString(charactersOpponent) +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RequestMessage message)) return false;
+        return character == message.character && roomId == message.roomId && Arrays.equals(charactersMy, message.charactersMy) && Arrays.equals(skills, message.skills) && Arrays.equals(xMy, message.xMy) && Arrays.equals(yMy, message.yMy) && Arrays.equals(xOpponent, message.xOpponent) && Arrays.equals(yOpponent, message.yOpponent) && Arrays.equals(charactersOpponent, message.charactersOpponent);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(character, roomId);
+        result = 31 * result + Arrays.hashCode(charactersMy);
+        result = 31 * result + Arrays.hashCode(skills);
+        result = 31 * result + Arrays.hashCode(xMy);
+        result = 31 * result + Arrays.hashCode(yMy);
+        result = 31 * result + Arrays.hashCode(xOpponent);
+        result = 31 * result + Arrays.hashCode(yOpponent);
+        result = 31 * result + Arrays.hashCode(charactersOpponent);
+        return result;
     }
 }
