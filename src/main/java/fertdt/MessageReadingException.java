@@ -1,4 +1,6 @@
-public class MessageReadingException extends Exception{
+package fertdt;
+
+public class MessageReadingException extends Exception {
     public MessageReadingException() {
     }
 

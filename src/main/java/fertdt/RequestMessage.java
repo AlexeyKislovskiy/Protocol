@@ -1,7 +1,10 @@
+package fertdt;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class RequestMessage extends Message {
@@ -95,7 +98,7 @@ public class RequestMessage extends Message {
         return createSkillMessage(SPECIAL_SKILL, character, xMy, yMy, xOpponent, yOpponent, charactersMy, charactersOpponent);
     }
 
-    public static RequestMessage ExitRequestMessage() {
+    public static RequestMessage createExitRequestMessage() {
         byte[] data = new byte[8];
         putVersionAndType(data, PROTOCOL_VERSION_ID, EXIT_REQUEST);
         return new RequestMessage(data, EXIT_REQUEST);
@@ -133,6 +136,11 @@ public class RequestMessage extends Message {
         } catch (IOException e) {
             throw new MessageReadingException("Can't read message", e);
         }
+    }
+
+    public static RequestMessage readMessage(List<Byte> list) throws MessageReadingException {
+        InputStream is = listByteToInputStream(list);
+        return readMessage(is);
     }
 
     public int getCharacter() {

@@ -1,7 +1,12 @@
+package fertdt;
+
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class Message {
     public static final int PROTOCOL_VERSION_ID = 1;
@@ -82,6 +87,14 @@ public abstract class Message {
         } catch (IOException e) {
             throw new MessageReadingException("Can't read message", e);
         }
+    }
+
+    protected static InputStream listByteToInputStream(List<Byte> list){
+        byte[] data=new byte[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            data[i] = list.get(i);
+        }
+        return new ByteArrayInputStream(data);
     }
 
     public byte[] getData() {

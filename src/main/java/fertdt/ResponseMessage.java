@@ -1,7 +1,10 @@
+package fertdt;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class ResponseMessage extends Message {
@@ -128,6 +131,11 @@ public class ResponseMessage extends Message {
         } catch (IOException e) {
             throw new MessageReadingException("Can't read message", e);
         }
+    }
+
+    public static ResponseMessage readMessage(List<Byte> list) throws MessageReadingException {
+        InputStream is = listByteToInputStream(list);
+        return readMessage(is);
     }
 
     public int getRequestStatusCode() {
